@@ -1,6 +1,6 @@
 # File Generator
 
-This repository contains Python scripts for generating binary files using both CPU and GPU resources. The GPU implementation leverages CUDA for parallel processing.
+This repository contains Python scripts for generating binary files using either the CPU or GPU. The GPU implementation uses PyCUDA for parallel processing, while the CPU implementation uses Python's `random` module.
 
 ## Table of Contents
 
@@ -15,60 +15,90 @@ This repository contains Python scripts for generating binary files using both C
 
 ## Introduction
 
-The File Generator project provides tools to create large binary files filled with random data. This is particularly useful for testing storage systems, benchmarking, and other scenarios where large datasets are required. The repository includes two main scripts:
+The File Generator project offers tools to create large binary files filled with random data. It includes two scripts:
 
-- `BinFileGen-CPU.py`: Generates binary files using the CPU.
-- `BinFileGen-GPU.py`: Generates binary files using the GPU with CUDA support.
+- `BinFileGen-CPU.py`: A script that generates binary files using the CPU and Python's `random` module.
+- `BinFileGen-GPU.py`: A script that utilizes PyCUDA and the `xoroshiro128plus` algorithm to generate binary files on the GPU.
 
 ## Features
 
-- Generate binary files of specified sizes.
-- Option to utilize GPU acceleration for faster file generation.
-- Customizable parameters for data patterns and file sizes.
+- Generate binary files of custom sizes.
+- Flexible input formats for file size (e.g., `100KB`, `2MB`, `1GB`).
+- CPU and GPU-based implementations for file generation.
+- Parallelized random byte generation on GPU for improved performance.
 
 ## Requirements
 
 - Python 3.x
-- NumPy library
+- Libraries:
+  - `numpy`
+  - `pycuda`
 - For GPU-based generation:
   - NVIDIA GPU with CUDA support
   - CUDA Toolkit installed
-  - PyCUDA library
 
 ## Usage
 
 ### CPU-Based File Generation
 
-To generate a binary file using the CPU script:
+The CPU-based script (`BinFileGen-CPU.py`) generates binary files using the `random` module.
 
-1. Ensure Python 3.x and NumPy are installed.
-2. Run the script with the desired parameters:
+#### Steps to Run:
 
+1. Ensure Python 3.x is installed.
+2. Install the required libraries:
    ```bash
-   python BinFileGen-CPU.py --output <output_file> --size <file_size>
+   pip install numpy
    ```
+3. Run the script:
+   ```bash
+   python BinFileGen-CPU.py
+   ```
+4. Provide the following inputs:
+   - File name (without extension).
+   - File size (e.g., `100KB`, `2MB`, `1GB`, or a raw integer for bytes).
 
-   - `<output_file>`: Path to the output binary file.
-   - `<file_size>`: Size of the file to generate (in bytes).
+Example:
+```bash
+Enter the file name: test_file
+Enter size (e.g., '100KB', '2MB', '1GB', or raw integer for B): 500MB
+```
+
+Output:
+```bash
+Binary file 'test_file.bin' generated with size 524288000 bytes in X.XXs
+```
 
 ### GPU-Based File Generation
 
-To generate a binary file using the GPU script:
+The GPU-based script (`BinFileGen-GPU.py`) generates binary files using CUDA and the `xoroshiro128plus` random number generation algorithm.
 
-1. Ensure the following are installed:
-   - Python 3.x
-   - NumPy
-   - NVIDIA GPU with CUDA support
-   - CUDA Toolkit
-   - PyCUDA
-2. Run the script with the desired parameters:
+#### Steps to Run:
 
+1. Ensure you have an NVIDIA GPU with CUDA support.
+2. Install the required libraries:
    ```bash
-   python BinFileGen-GPU.py --output <output_file> --size <file_size>
+   pip install numpy pycuda
    ```
+3. Ensure the CUDA kernel file (`xoroshiro128plus_kernel.cu`) is in the same directory as the script.
+4. Run the script:
+   ```bash
+   python BinFileGen-GPU.py
+   ```
+5. Provide the following inputs:
+   - File name (without extension).
+   - File size (e.g., `100KB`, `2MB`, `1GB`, or a raw integer for bytes).
 
-   - `<output_file>`: Path to the output binary file.
-   - `<file_size>`: Size of the file to generate (in bytes).
+Example:
+```bash
+Enter the file name: test_file
+Enter size (e.g., '100KB', '2MB', '1GB', or raw integer for B): 1GB
+```
+
+Output:
+```bash
+Binary file 'test_file.bin' generated with size 1073741824 bytes in X.XXs
+```
 
 ## License
 
@@ -79,7 +109,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [NumPy Documentation](https://numpy.org/doc/)
 - [PyCUDA Documentation](https://documen.tician.de/pycuda/)
 - [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit)
-
-```
-
-This `README.md` provides an overview of your project, instructions for usage, and relevant references to assist users in understanding and utilizing your file generator scripts effectively. 

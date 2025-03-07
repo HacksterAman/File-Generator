@@ -1,3 +1,4 @@
+# BinFileGen-CPU.py
 import os
 import random
 import time
